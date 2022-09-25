@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TodoList</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body>
+    <div id="main">
+
+        <div class="container">
+            <div id="countdown">
+                <div id="time">
+                    5:00
+                </div>
+                <div class="button-start">
+                    <button class="js-btn-start">START</button>
+                </div>
+            </div>
+    
+            <div id="tasks">
+                <div class="manager-tasks">
+                    <span class="task-title">Tasks</span>
+                    <div class="button-manager-task">
+                        <button><img src="./assets/img/threedots-white.png" alt="..." width="16px"></button>
+                    </div>
+                </div>
+
+                <div class="list-task js-task">
+                    <div class="task">
+                        <div class="finish js-finish"></div>
+                        <div class="name-task js-name-task"></div>
+                    </div>
+                    <div class="edit-task">
+                        <span class="number-est-task js-est"></span>
+                        <button class="js-btn-edit-task"><img src="./assets/img/vertical-ellipsis.png" alt="..." width="16px"></button>
+                    </div>
+                </div>
+
+                <div class="tao-task js-edit-task">
+                    <div class="create-task">
+                        <div class="input-task">
+                            <input type="text" class="js-input-task-edit" placeholder="What are you working on?" value>
+                        </div>
+                        <div class="est-task">
+                            <span>Est Pomodoros</span><br>
+                            <input type="number" class="js-est-task-edit" value="1" min="0" step="1"> 
+                        </div>
+                    </div>
+    
+                    <div class="save-task">
+                        <button class="cancle-task js-delete">Delete</button>
+                        <button class="cancle-task js-cancle-edit">Cancle</button>
+                        <button class="bt-save-task js-save-edit">Save</button>
+                    </div>
+                </div>
+
+                <div class="add-task js-add-task"  >
+                    <img src="./assets/img/plus-circle-white.png" alt="+" width="18px">
+                    <div>Add Task</div>
+                </div>
+
+                
+
+                <div class="tao-task js-create-task">
+                    <div class="create-task">
+                        <div class="input-task">
+                            <input type="text" class="js-input-task" placeholder="What are you working on?" >
+                        </div>
+                        <div class="est-task">
+                            <span>Est Pomodoros</span><br>
+                            <input type="number" class="js-est-task" value="1" min="0" step="1"> 
+                        </div>
+                    </div>
+    
+                    <div class="save-task ">
+                        <button class="cancle-task js-cancle">Cancle</button>
+                        <button class="bt-save-task js-save-task">Save</button>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+
+    <script>
+        const btn_add = document.querySelector('.js-add-task')
+        const add_task = document.querySelector('.js-create-task')
+        const btn_cancle = document.querySelector('.js-cancle')
+        const btn_save = document.querySelector('.js-save-task')
+        const input_task = document.querySelector('.js-input-task')
+        const task = document.querySelector('.js-task')
+        const finish_task = document.querySelector('.js-finish')
+        const name_task = document.querySelector('.js-name-task')
+        const btn_edit_task = document.querySelector('.js-btn-edit-task')
+        const est_task = document.querySelector('.js-est')
+        const edit_task =  document.querySelector('.js-edit-task')
+        const delete_task = document.querySelector('.js-delete')
+        const btn_cancle_edit = document.querySelector('.js-cancle-edit')
+        const btn_save_edit = document.querySelector('.js-save-edit')
+        const task_name_edit = document.querySelector('.js-input-task-edit')
+        const est_task_edit = document.querySelector('.js-est-task-edit')
+        const btn_start = document.querySelector('.js-btn-start')
+
+        function showAddTask(){
+            add_task.classList.add('open')
+            btn_add.classList.add('close')
+        }
+        function removeAddTask(){
+            add_task.classList.remove('open')
+            btn_add.classList.remove('close')
+        }
+
+        function showTask(){
+            task.classList.add('open_task')
+        }
+        
+        function addTask(){
+            const task = document.querySelector('.js-input-task').value
+            const est = document.querySelector('.js-est-task').value
+            if(task != ''){
+                localStorage.setItem('task', task) 
+                localStorage.setItem('est', est) 
+                showTask()
+                removeAddTask()
+                var data = localStorage.getItem('task')
+                name_task.innerHTML = data
+                var est_view = localStorage.getItem('est')
+                est_task.innerHTML = '0/' + est_view
+            }      
+        }
+
+        function finishTask(){
+            finish_task.style.backgroundColor = 'red'
+            name_task.style.textDecorationLine = 'line-through'
+            name_task.style.color = '#ccc'
+        }
+
+        function showEditTask(){
+            var data = localStorage.getItem('task')
+            task_name_edit.value = data
+            var est_view = localStorage.getItem('est')
+            est_task_edit.value = est_view
+            edit_task.classList.add('open_edit')
+            task.classList.remove('open_task')
+        }
+
+        function deleteTask(){
+            task.classList.remove('open_task')
+            edit_task.classList.remove('open_edit')
+            localStorage.removeItem('task')
+            localStorage.removeItem('est')
+
+        }
+        function btnCancleEdit(){
+            edit_task.classList.remove('open_edit')
+            task.classList.add('open_task')
+        }
+        function saveEdit(){
+            if(task_name_edit.value != ''){
+                localStorage.setItem('task', task_name_edit.value) 
+                localStorage.setItem('est', est_task_edit.value) 
+                showTask()
+                edit_task.classList.remove('open_edit')
+                var data = localStorage.getItem('task')
+                name_task.innerHTML = data
+                var est_view = localStorage.getItem('est')
+                est_task.innerHTML = '0/' + est_view
+            }   
+        }
+
+        function startTimer(duration, display, time) {
+            var timer = duration, minutes, seconds;
+            setInterval(function () {
+                minutes = parseInt(timer / 60, 10)
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    timer = duration;
+                }
+            }, time);
+        }
+            function startT(){
+                var fiveMinutes = 60 * 5,
+                display = document.querySelector('#time');
+                btn_start.innerHTML = 'Stop'
+                btn_start.style.boxShadow = 'none'
+                btn_start.style.margin = '0px 0 0'
+                startTimer(fiveMinutes, display,1000);
+            }
+
+        btn_add.addEventListener('click',showAddTask)
+        btn_cancle.addEventListener('click',removeAddTask)
+        btn_save.addEventListener('click', addTask)
+        finish_task.addEventListener('click', finishTask)
+        btn_edit_task.addEventListener('click', showEditTask)
+        delete_task.addEventListener('click', deleteTask)
+        btn_cancle_edit.addEventListener('click',btnCancleEdit)
+        btn_save_edit.addEventListener('click', saveEdit)
+        btn_start.addEventListener('click', startT)
+    </script>
+</body>
+</html>
